@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import math
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import f1_score
+d=pd.read_csv(r"C:\Users\LENOVO\Desktop\New folder\data/diabetes.csv")
+d.head(9)
+d.isna().sum()
+z=['Glucose','BloodPressure','SkinThickness','Insulin','BMI']
+for column in z:
+    d[column]=d[column].replace(0,np.NAN)
+    mean=d[column].mean(skipna=True)
+    d[column]=d[column].replace(np.NAN,mean)
+d.head(5)
+x=d.drop(['Outcome'],axis=1)
+y=d['Outcome']
+from sklearn import preprocessing
+X_scale=preprocessing.scale(X)
+X_train, X_test, y_train, y_test = train_test_split(X_scale,y, test_size=0.30)
+X_train
+from sklearn.neighbors import KNeighborsClassifier
+import math
+math.sqrt(len(X_test))
+model=KNeighborsClassifier(n_neighbors=20,metric='euclidean')
+model.fit(X_train,y_train)
+y_pred=model.predict(X_test)
+y_pred
+con=confusion_matrix(y_test,y_pred)
+con
+score=f1_score(y_test,y_pred)
+score
+print(accuracy_score(y_test,y_pred))
